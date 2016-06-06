@@ -17,27 +17,29 @@ public class BoundedBuffer<T> extends BaseBoundedBuffer<T> implements Buffer<T>{
 
     // BLOCKS-UNTIL: not-full
     @Override
-    public void put(T t) throws InterruptedException {
-        synchronized (this) {
-            while (isFull()) {
-                this.wait();
-            }
-            doPut(t);
+    public synchronized void put(T t) throws InterruptedException {
+        while (isFull()) {
+            this.wait();
+        }
+        boolean wasEmpty = isEmpty();
+        doPut(t);
+        if (wasEmpty) {
             this.notifyAll();
         }
     }
 
     // BLOCKS-UNTIL: not-empty
     @Override
-    public T get() throws InterruptedException {
-        synchronized (this) {
-            while (isEmpty()) {
-                this.wait();
-            }
-            T res = doGet();
-            this.notifyAll();
-            return res;
+    public synchronized T get() throws InterruptedException {
+        while (isEmpty()) {
+            this.wait();
         }
+        boolean wasFull = isFull();
+        T res = doGet();
+        if (wasFull) {
+            this.notifyAll();
+        }
+        return res;
     }
 
 
