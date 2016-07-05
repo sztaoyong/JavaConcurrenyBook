@@ -18,4 +18,13 @@ public enum YongTest {
     public String shortHand() {
         return shorthand;
     }
+
+    YongTest apply(int i) {
+        switch (this) {
+            case MONDAY: return TUESDAY;
+            case TUESDAY: return MONDAY;
+            default: return MONDAY;
+        }
+    }
+
 }

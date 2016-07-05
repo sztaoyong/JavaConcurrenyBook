@@ -24,6 +24,9 @@ public enum PlanetEnum {
     private final double radius; // in meters
     private final double surfaceGravity;
 
+    // NOTE - this constructor modifier is package-level.
+    // cannot use it from other places. (it will show this has a private access or Enum type cannot be instantiated).
+    // it is used internally to create enum constants.
     PlanetEnum(double mass, double radius) {
         this.mass = mass;
         this.radius = radius;
